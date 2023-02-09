@@ -56,10 +56,12 @@ func downloadFile(url string, chunkCount int) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
+	
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("unexpected status code: %d, couldn't download the file", resp.StatusCode)
 	}
-	defer resp.Body.Close()
+	
 	size, err := strconv.ParseInt(resp.Header.Get("Content-Length"), 10, 64)
 	MB := float64(size) / 1024 / 1024
 
